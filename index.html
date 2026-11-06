@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Weri – Protótipo</title>
+<style>
+:root{--bg:#faf5f0;--tx:#3d1a4a;--pr:#4a1f55;--prt:#fff;--ph:#8a7a90;--bd:#4a1f55;--sf:#fff;--fs:16px;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1220;--tx:#f1e4f5;--pr:#c58be0;--prt:#1b1220;--ph:#b9a6c4;--bd:#c58be0;--sf:#2a1d31}}
+:root[data-theme="dark"]{--bg:#1b1220;--tx:#f1e4f5;--pr:#c58be0;--prt:#1b1220;--ph:#b9a6c4;--bd:#c58be0;--sf:#2a1d31}
+:root[data-big="1"]{--fs:19px}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#222;font:var(--fs)/1.35 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center}
+#app{width:100%;max-width:430px;height:100%;background:var(--bg);color:var(--tx);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.scr{display:none;flex:1;flex-direction:column;overflow-y:auto}
+.scr.on{display:flex}
+.logo{font-family:"Segoe Print","Bradley Hand","Comic Sans MS",cursive;color:var(--pr);font-size:4.2em;text-align:center;margin:0}
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px;gap:12px}
+h1,h2{margin:0;text-align:center}
+.btn{min-height:52px;border-radius:14px;border:1.5px solid var(--bd);background:var(--sf);color:var(--pr);font:inherit;font-weight:700;cursor:pointer;padding:8px 16px}
+.btn.p{background:var(--pr);color:var(--prt)}
+.btn.sm{align-self:flex-end;border-radius:99px;min-height:44px}
+input{min-height:52px;border-radius:14px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font:inherit;padding:8px 16px;width:100%}
+input::placeholder{color:var(--ph)}
+.err{color:#b3261e;font-size:.9em;min-height:1.2em;text-align:left}
+:root[data-theme="dark"] .err{color:#ff8a80}
+.bar{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid #d8cdd8}
+.bar .logo{font-size:1.8em}
+.bell{width:44px;height:44px;border-radius:50%;background:#d9bde6;border:0;font-size:1.1em;cursor:pointer}
+.tabs{display:flex;gap:8px;padding:8px 10px;border-bottom:1px solid #d8cdd8}
+.tab{flex:1;min-height:44px;border-radius:12px;border:1px solid var(--c);background:var(--l);color:#2b1633;font:inherit;font-size:.85em;cursor:pointer}
+.tab.on{background:var(--c);color:#fff;font-weight:700}
+#home{--c:#4a1f55;--l:#bfa8c4;--v:#94858f}
+#home[data-f="con"]{--c:#1f4f55;--l:#bfa8c4;--v:#8bb9c4}
+#home[data-f="opo"]{--c:#b8470a;--l:#bfa8c4;--v:#d4805e}
+#home .bar .logo{color:var(--c)}
+.video{flex:1;min-height:220px;background:var(--v);display:flex;align-items:center;justify-content:center;position:relative}
+.play{width:0;height:0;border-left:80px solid #ddd;border-top:60px solid transparent;border-bottom:60px solid transparent;cursor:pointer}
+.ov{position:absolute;left:8px;right:8px;bottom:8px;display:flex;gap:6px;flex-wrap:wrap}
+.ov button{min-height:44px;border-radius:12px;border:0;background:#000b;color:#fff;font:inherit;font-size:.8em;padding:6px 10px;cursor:pointer}
+.cap{position:absolute;left:12px;right:12px;top:10px;background:#000b;color:#fff;border-radius:8px;padding:4px 8px;font-size:.85em;text-align:center}
+.nav{display:flex;justify-content:space-around;align-items:center;padding:8px;background:var(--bg);border-top:1px solid #d8cdd8;--c:#4a1f55}
+.nav[data-f="con"]{--c:#1f4f55}.nav[data-f="opo"]{--c:#b8470a}
+.nav button{width:52px;height:52px;border-radius:14px;border:0;background:var(--c);color:#fff;font-size:1.3em;cursor:pointer}
+.nav button.on{outline:3px solid #fff8;background:color-mix(in srgb,var(--c) 60%,#fff)}
+.nav .plus{width:36px;height:36px;border-radius:50%;font-size:1.4em;font-weight:700;padding:0}
+button:focus-visible,input:focus-visible{outline:3px solid #e68a00;outline-offset:2px}
+.pad{padding:16px;display:flex;flex-direction:column;gap:12px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-height:44px;border-radius:99px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font:inherit;padding:6px 14px;cursor:pointer}
+.chip.on{background:var(--pr);color:var(--prt)}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.card p{margin:0;opacity:.8}
+.tag{align-self:flex-start;background:#d9bde6;color:#2b1633;border-radius:99px;padding:2px 10px;font-size:.8em;font-weight:700}
+label.r{display:flex;gap:10px;align-items:center;min-height:44px}
+input[type=checkbox],input[type=radio]{width:24px;height:24px;min-height:0}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg);border-top:2px solid var(--bd);border-radius:18px 18px 0 0;padding:16px;display:none;flex-direction:column;gap:10px;z-index:5}
+.sheet.on{display:flex}
+.toast{position:absolute;left:16px;right:16px;bottom:90px;background:#222;color:#fff;padding:12px;border-radius:12px;display:none;z-index:9}
+.warn{border:2px solid #b3261e;color:#b3261e;border-radius:12px;padding:10px;display:none}
+</style>
+</head>
+<body>
+<div id="app">
+
+<section class="scr on" id="a1"><div class="center"><p class="logo">Weri</p><div style="height:60px"></div><h1>Bem-vinda!</h1><button class="btn p" data-go="a2" style="font-size:1.2em">Entrar</button><button class="btn" data-go="a3">Criar conta</button></div></section>
+
+<section class="scr" id="a2"><div class="center"><p class="logo">Weri</p><h1>Login</h1>
+<input id="lm" type="email" placeholder="Digite o email" aria-label="Email"><input id="ls" type="password" placeholder="Digite a senha" aria-label="Senha"><div class="err" id="le"></div>
+<button class="btn p sm" id="bLog">Entrar</button><button class="btn" data-go="a1" style="border:0">← Voltar</button></div></section>
+
+<section class="scr" id="a3"><div class="center"><p class="logo">Weri</p><h1>Cadastro</h1>
+<input id="cu" placeholder="Digite o nome de usuário" aria-label="Nome de usuário"><input id="ce" type="email" placeholder="Informe seu email" aria-label="Email"><input id="cs" type="password" placeholder="Informe sua senha" aria-label="Senha"><input id="cc" type="password" placeholder="Confirme sua senha" aria-label="Confirmar senha"><div class="err" id="ce2"></div>
+<button class="btn p sm" id="bCad">Cadastrar</button><button class="btn" data-go="a1" style="border:0">← Voltar</button></div></section>
+
+<section class="scr" id="a9"><div class="center"><h1>Verificar perfil</h1><p style="text-align:center;margin:0">O selo ✔ mostra que seu perfil é real e deixa a rede mais segura. Seus dados não ficam visíveis.</p>
+<label class="r"><input type="radio" name="v" checked> Selfie rápida</label><label class="r"><input type="radio" name="v"> Documento com foto</label>
+<button class="btn p" data-go="home" data-toast="Enviado para verificação">Verificar agora</button><button class="btn" data-go="home">Fazer depois</button></div></section>
+
+<section class="scr" id="home" data-f="exp">
+<div class="bar"><p class="logo">Weri</p><button class="bell" aria-label="Notificações" data-toast="Sem novas notificações">🔔</button></div>
+<div class="tabs" role="tablist">
+<button class="tab on" data-f="exp" role="tab" aria-selected="true">Experiências</button>
+<button class="tab" data-f="con" role="tab" aria-selected="false">Conhecimentos</button>
+<button class="tab" data-f="opo" role="tab" aria-selected="false">Oportunidades</button></div>
+<div class="video"><div class="cap" id="cap">Legenda automática: bem-vinda ao Weri</div><div class="play" id="play" role="button" aria-label="Reproduzir"></div>
+<div class="ov"><button id="bCap">Legenda: ligada</button><button id="bFmt">Ver em: vídeo</button><button id="bRes">💬 Responder</button><button data-toast="Denúncia enviada. Obrigada por cuidar da rede." aria-label="Denunciar ou bloquear">⚑ Denunciar</button></div></div>
+</section>
+
+<section class="scr" id="a5"><div class="pad"><h2>Buscar</h2>
+<input id="q" placeholder="Buscar vagas, cursos, mentorias" aria-label="Buscar">
+<div class="chips"><button class="chip" id="fL">Local: Todos</button><button class="chip" id="fT">Tipo: Todos</button><button class="chip" id="fC">Compromisso: Todos</button><button class="chip" id="fX">Limpar</button></div>
+<strong id="cnt"></strong><div id="list" style="display:flex;flex-direction:column;gap:10px"></div></div></section>
+
+<section class="scr" id="a6"><div class="pad"><h2>Publicar</h2>
+<strong>Formato</strong><div class="chips" id="gF"><button class="chip on">Vídeo</button><button class="chip">Áudio</button><button class="chip">Slides</button><button class="chip">Texto</button></div>
+<strong>Frente</strong><div class="chips" id="gR"><button class="chip on">Experiências</button><button class="chip">Conhecimentos</button><button class="chip">Oportunidades</button></div>
+<strong>Visível para</strong>
+<label class="r"><input type="radio" name="vis" id="vA" checked> Todas as conexões</label><label class="r"><input type="radio" name="vis"> Só conexões diretas (modo privado)</label>
+<label class="r"><input type="checkbox" id="cL" checked> Gerar legenda automática</label>
+<div class="warn" id="warn" role="alert"></div><button class="btn p" id="bPub">Publicar</button></div></section>
+
+<section class="scr" id="a7"><div class="pad"><h2>Configurações</h2>
+<button class="btn" id="sD">Modo escuro</button><button class="btn" id="sB">Aumentar fonte e botões</button><button class="btn" id="sE">Economia de dados: desligada</button><button class="btn" id="sV">Comandos por voz e leitor de tela: desligado</button><button class="btn" data-go="a1">Sair</button></div></section>
+
+<section class="scr" id="a8"><div class="pad"><h2>Meu perfil</h2><div class="card"><strong>Joana ✔</strong><p>Em busca de oportunidades · Perfil verificado</p></div><div class="card"><strong>Minhas oportunidades salvas</strong><p id="sv">Nenhuma ainda.</p></div></div></section>
+
+<div class="sheet" id="sh"><strong>Como quer responder?</strong>
+<button class="btn" data-toast="Abrindo câmera para réplica de até 1 min">🎥 Réplica em vídeo</button><button class="btn" data-toast="Mensagem privada aberta">✉️ Mensagem privada</button><button class="btn" data-toast="Comentário em texto ou emoji">💬 Comentar</button><button class="btn" id="sC">Fechar</button></div>
+<div class="toast" id="toast" role="status"></div>
+
+<nav class="nav" id="nav" data-f="exp" style="display:none">
+<button data-go="home" aria-label="Início" class="on">🏠</button><button data-go="a5" aria-label="Buscar">🔍</button><button class="plus" data-go="a6" aria-label="Publicar">+</button><button data-go="a7" aria-label="Configurações">⚙️</button><button data-go="a8" aria-label="Perfil">👤</button></nav>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const ops=[["Curso gratuito de Excel","Curso gratuito","Remoto","Flexível"],["Assistente administrativa","Vaga de emprego","Presencial","Integral"],["Mentoria em gestão","Mentoria","Remoto","Meio período"],["Edital de microcrédito","Edital","Presencial","Flexível"],["Atendimento, meio período","Vaga de emprego","Presencial","Meio período"]];
+const F={l:["Todos","Presencial","Remoto"],t:["Todos","Vaga de emprego","Curso gratuito","Mentoria","Edital"],c:["Todos","Flexível","Meio período","Integral"]},st={l:0,t:0,c:0},saved=[];let capOn=true,fm=0,fr="exp";
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(toast.h);toast.h=setTimeout(()=>t.style.display="none",2200)}
+function go(id){$$(".scr").forEach(e=>e.classList.toggle("on",e.id===id));$("#sh").classList.remove("on");$("#nav").style.display=["a1","a2","a3","a9"].includes(id)?"none":"flex";const m={home:0,a5:1,a6:2,a7:3,a8:4}[id];$$("#nav button").forEach((b,i)=>b.classList.toggle("on",i===m));if(id==="a5")rs()}
+function rs(){$("#fL").textContent="Local: "+F.l[st.l];$("#fT").textContent="Tipo: "+F.t[st.t];$("#fC").textContent="Compromisso: "+F.c[st.c];
+$("#fL").classList.toggle("on",st.l>0);$("#fT").classList.toggle("on",st.t>0);$("#fC").classList.toggle("on",st.c>0);
+const q=$("#q").value.toLowerCase(),r=ops.filter(o=>(!st.l||o[2]===F.l[st.l])&&(!st.t||o[1]===F.t[st.t])&&(!st.c||o[3]===F.c[st.c])&&o[0].toLowerCase().includes(q));
+$("#cnt").textContent=r.length+" resultado"+(r.length===1?"":"s");
+$("#list").innerHTML=r.length?r.map(o=>`<div class="card"><span class="tag">${o[1]}</span><strong>${o[0]}</strong><p>${o[2]} · ${o[3]} · ✔ perfil verificado</p><button class="btn" data-save="${o[0]}">Salvar</button></div>`).join(""):'<div class="card"><p>Nada encontrado. Toque em Limpar.</p></div>'}
+document.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+if(b.dataset.go)go(b.dataset.go);if(b.dataset.toast)toast(b.dataset.toast);
+if(b.dataset.save){if(!saved.includes(b.dataset.save))saved.push(b.dataset.save);$("#sv").textContent=saved.join(" · ");toast("Oportunidade salva")}
+if(b.classList.contains("tab")){fr=b.dataset.f;$("#home").dataset.f=fr;$("#nav").dataset.f=fr;$$(".tab").forEach(t=>{t.classList.toggle("on",t===b);t.setAttribute("aria-selected",t===b)})}});
+$("#bLog").onclick=()=>{if(!$("#lm").value||!$("#ls").value){$("#le").textContent="Preencha email e senha para entrar.";return}$("#le").textContent="";go("home")};
+$("#bCad").onclick=()=>{const e=$("#ce2");if(!$("#cu").value||!$("#ce").value||!$("#cs").value){e.textContent="Preencha todos os campos.";return}if($("#cs").value!==$("#cc").value){e.textContent="As senhas não coincidem. Digite novamente.";return}e.textContent="";go("a9")};
+$("#bCap").onclick=e=>{capOn=!capOn;e.target.textContent="Legenda: "+(capOn?"ligada":"desligada");$("#cap").style.display=capOn?"block":"none"};
+$("#bFmt").onclick=e=>{const f=["vídeo","áudio","texto"];fm=(fm+1)%3;e.target.textContent="Ver em: "+f[fm];toast(fm===1?"Reproduzindo só o áudio":fm===2?"Resumo em texto aberto":"Voltando ao vídeo")};
+$("#play").onclick=()=>toast("Reproduzindo...");
+$("#bRes").onclick=()=>$("#sh").classList.add("on");$("#sC").onclick=()=>$("#sh").classList.remove("on");
+$("#fL").onclick=()=>{st.l=(st.l+1)%3;rs()};$("#fT").onclick=()=>{st.t=(st.t+1)%5;rs()};$("#fC").onclick=()=>{st.c=(st.c+1)%4;rs()};$("#fX").onclick=()=>{st.l=st.t=st.c=0;$("#q").value="";rs()};$("#q").oninput=rs;
+["#gF","#gR"].forEach(g=>$$(g+" .chip").forEach(c=>c.onclick=()=>{$$(g+" .chip").forEach(x=>x.classList.remove("on"));c.classList.add("on")}));
+$("#bPub").onclick=()=>{const w=$("#warn");if(!$("#cL").checked){w.textContent="Sem legenda, pessoas com deficiência auditiva não conseguem acompanhar. Ative a legenda.";w.style.display="block";return}
+if($("#vA").checked&&!w.dataset.s){w.dataset.s=1;w.textContent="Isto ficará visível a todas as suas conexões. Escolha o modo privado ou toque em Publicar de novo para confirmar.";w.style.display="block";return}
+w.style.display="none";delete w.dataset.s;toast("Publicado com sucesso");go("home")};
+$("#sD").onclick=()=>{const r=document.documentElement;const d=r.dataset.theme==="dark"||(!r.dataset.theme&&matchMedia("(prefers-color-scheme:dark)").matches);r.dataset.theme=d?"light":"dark"};
+$("#sB").onclick=()=>{const r=document.documentElement;r.dataset.big=r.dataset.big==="1"?"0":"1"};
+let ed=0,vz=0;$("#sE").onclick=e=>{ed=!ed;e.target.textContent="Economia de dados: "+(ed?"ligada":"desligada");toast(ed?"Vídeos em baixa qualidade ou só áudio":"Qualidade normal")};
+$("#sV").onclick=e=>{vz=!vz;e.target.textContent="Comandos por voz e leitor de tela: "+(vz?"ligado":"desligado")};
+</script>
+</body>
+</html>
